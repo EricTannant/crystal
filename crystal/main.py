@@ -33,16 +33,16 @@ websocket_manager = WebSocketManager()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager - startup and shutdown events."""
-    logger.info("🔮 Crystal Personal Assistant AI starting up...")
+    logger.info("Crystal Personal Assistant AI starting up...")
     
     # Initialize the orchestrator
     orchestrator = CrystalOrchestrator()
     await orchestrator.initialize()
     app.state.orchestrator = orchestrator
     
-    logger.info(f"🌐 Web interface available at http://{settings.host}:{settings.port}")
-    logger.info(f"📚 API documentation at http://{settings.host}:{settings.port}/docs")
-    logger.info("💎 Ruby assistant ready for tasks!")
+    logger.info(f"Web interface available at http://{settings.host}:{settings.port}")
+    logger.info(f"API documentation at http://{settings.host}:{settings.port}/docs")
+    logger.info("Ruby assistant ready for tasks!")
     
     yield
     

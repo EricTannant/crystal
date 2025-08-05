@@ -43,24 +43,35 @@ Next install all the requirements.
 ### 3. Setup Database (PostgreSQL)
 
 ```powershell
-# Option A: Install PostgreSQL locally
-# Download from: https://www.postgresql.org/download/windows/
-# During installation, remember your postgres password
+# Step 1: Create the Crystal database and user
+# Open PostgreSQL command line (psql) as postgres user
+# You can find "SQL Shell (psql)" in your Start menu after PostgreSQL installation
 
-# Option B: Use Docker (if you have Docker Desktop)
+# In psql, run these commands:
+CREATE DATABASE crystal;
+CREATE USER crystal WITH PASSWORD 'crystal';
+GRANT ALL PRIVILEGES ON DATABASE crystal TO crystal;
+\q
+
+# Step 2: Test the connection
+# Try connecting with the crystal user
+psql -U crystal -d crystal -h localhost
+
+# If successful, you should see: crystal=>
+# Type \q to exit
+
+# Step 3: Update your .env file
+# Make sure your .env file has the correct DATABASE_URL:
+# DATABASE_URL=postgresql://crystal:crystal@localhost/crystal
+
+# Alternative: Use Docker (if you have Docker Desktop)
 docker run --name crystal-postgres -e POSTGRES_DB=crystal -e POSTGRES_USER=crystal -e POSTGRES_PASSWORD=crystal -p 5432:5432 -d postgres:15
-
-# Update database connection in config/settings.py if needed
-# Default: postgresql://crystal:crystal@localhost/crystal
-
-# Run database migrations
-alembic upgrade head
 ```
 
 ### 4. Configure AI Models
 
 ```powershell
-# Option A: For OpenAI API (easiest to get started)
+# Option A: For OpenAI API copy the .env.sample file into .env and add your OPENAI API KEY
 $env:OPENAI_API_KEY = "your-api-key-here"
 
 # Option B: For local models (requires more setup but free)

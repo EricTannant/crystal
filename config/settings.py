@@ -90,13 +90,6 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
         case_sensitive = False
-        
-        # Environment variable mappings
-        fields = {
-            'database_url': {'env': 'DATABASE_URL'},
-            'openai_api_key': {'env': 'OPENAI_API_KEY'},
-            'secret_key': {'env': 'SECRET_KEY'}
-        }
 
 # Global settings instance
 settings = Settings()
@@ -108,8 +101,8 @@ class AssistantConfig:
     RUBY = {
         "name": "Ruby",
         "description": "Main general-purpose assistant",
-        "preferred_model": "llama3.1:8b",
-        "fallback_model": "gpt-3.5-turbo",
+        "preferred_model": "gpt-4o-mini",
+        "fallback_model": "llama3.1:8b",
         "instructions_file": "crystal/assistants/instructions/ruby_instructions.md",
         "capabilities": {
             "schedule_management": "Manage calendars, appointments, and reminders",

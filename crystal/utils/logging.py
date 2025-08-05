@@ -31,9 +31,18 @@ def setup_logging() -> None:
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
             logging.StreamHandler(sys.stdout),
-            logging.FileHandler(settings.log_file) if settings.log_file else logging.NullHandler()
+            logging.FileHandler(settings.log_file, encoding='utf-8') if settings.log_file else logging.NullHandler()
         ]
     )
+    
+    # Set UTF-8 encoding for console output on Windows (only if needed)
+    if sys.platform == "win32" and hasattr(sys.stdout, 'buffer'):
+        try:
+            import codecs
+            sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+        except (AttributeError, UnicodeError):
+            # If UTF-8 setup fails, continue without it
+            pass
     
     # Configure structured logging if enabled
     if settings.structured_logging:
@@ -74,9 +83,8 @@ class CrystalLogger:
     def assistant_action(self, assistant: str, action: str, **kwargs):
         """Log an assistant action."""
         self.logger.info(
-            "assistant_action",
+            action,
             assistant=assistant,
-            action=action,
             component=self.component,
             **kwargs
         )
@@ -84,8 +92,7 @@ class CrystalLogger:
     def system_event(self, event: str, **kwargs):
         """Log a system event."""
         self.logger.info(
-            "system_event",
-            event=event,
+            event,
             component=self.component,
             **kwargs
         )
